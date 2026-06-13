@@ -177,32 +177,49 @@ info "Применяем sysctl hardening..."
 cat > /etc/sysctl.d/99-remnawave-hardening.conf <<EOF
 # Remnawave Node — Kernel Hardening
 
+cat << 'EOF' > /etc/systemd/system/disable-ipv6.service
+[Unit]
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/sysctl -w net.ipv6.conf.all.disable_ipv6=1 net.ipv6.conf.default.disable_ipv6=1
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable --now disable-ipv6.service
+
+
 # Защита от IP-спуфинга
-net.ipv4.conf.all.rp_filter = 1
-net.ipv4.conf.default.rp_filter = 1
+# net.ipv4.conf.all.rp_filter = 1
+# net.ipv4.conf.default.rp_filter = 1
 
 # Отключаем ICMP редиректы
-net.ipv4.conf.all.accept_redirects = 0
-net.ipv6.conf.all.accept_redirects = 0
-net.ipv4.conf.all.send_redirects = 0
+# net.ipv4.conf.all.accept_redirects = 0
+# net.ipv6.conf.all.accept_redirects = 0
+# net.ipv4.conf.all.send_redirects = 0
 
 # Не принимаем source-routed пакеты
-net.ipv4.conf.all.accept_source_route = 0
-net.ipv6.conf.all.accept_source_route = 0
+# net.ipv4.conf.all.accept_source_route = 0
+# net.ipv6.conf.all.accept_source_route = 0
 
 # SYN flood защита
-net.ipv4.tcp_syncookies = 1
-net.ipv4.tcp_max_syn_backlog = 2048
-net.ipv4.tcp_synack_retries = 2
-net.ipv4.tcp_syn_retries = 5
+# net.ipv4.tcp_syncookies = 1
+# net.ipv4.tcp_max_syn_backlog = 2048
+# net.ipv4.tcp_synack_retries = 2
+# net.ipv4.tcp_syn_retries = 5
 
 # Защита от TIME_WAIT атак
-net.ipv4.tcp_rfc1337 = 1
+# net.ipv4.tcp_rfc1337 = 1
 
 # Логируем подозрительные пакеты
-net.ipv4.conf.all.log_martians = 1
+# net.ipv4.conf.all.log_martians = 1
 
-EOF
+# EOF
 
 sysctl -p /etc/sysctl.d/99-remnawave-hardening.conf --quiet
 success "sysctl hardening применён"
