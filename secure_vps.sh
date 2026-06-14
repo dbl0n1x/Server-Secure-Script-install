@@ -99,10 +99,10 @@ sshd: ALL
 EOF
 
 # Сбрасываем соединение по 443 порту кроме доверенного IP
-apt install iptables-persistent -y
-iptables -I DOCKER-USER -p tcp --dport 443 -s $TRUSTED_IP -j ACCEPT
-iptables -A DOCKER-USER -p tcp --dport 443 -j DROP
-netfilter-persistent save
+# apt install iptables-persistent -y
+# iptables -I DOCKER-USER -p tcp --dport 443 -s $TRUSTED_IP -j ACCEPT
+# iptables -A DOCKER-USER -p tcp --dport 443 -j DROP
+# netfilter-persistent save
 
 success "hosts.allow/deny настроены (доверенный IP: $TRUSTED_IP)"
 
