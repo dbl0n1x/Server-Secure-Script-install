@@ -246,6 +246,7 @@ echo -e "${GREEN}${BOLD}══════════════════�
 echo ""
 echo -e "${BOLD}Что сделано:${NC}"
 echo -e "  ${GREEN}✓${NC} Создан пользователь: ${BOLD}$NEW_USER${NC} (sudo без пароля)"
+echo -e "  ${GREEN}✓${NC} Пользователь $NEW_USER добавлен в группу docker (если группа существует)"
 echo -e "  ${GREEN}✓${NC} SSH-ключ добавлен для $NEW_USER"
 if [[ -n "$TRUSTED_IP" ]]; then
     echo -e "  ${GREEN}✓${NC} SSH: только ключ, только $TRUSTED_IP, порт $SSH_PORT"
