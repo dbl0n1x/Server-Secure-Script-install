@@ -72,6 +72,13 @@ else
 fi
 
 usermod -aG sudo "$NEW_USER"
+# Добавляем пользователя в группу docker
+if getent group docker >/dev/null; then
+    usermod -aG docker "$NEW_USER"
+    success "Пользователь '$NEW_USER' добавлен в группу docker"
+else
+    warn "Группа docker не найдена. Docker, вероятно, ещё не установлен."
+fi
 
 # Настройка sudo без пароля (удобно для автоматизации; убери если хочешь с паролем)
 echo "$NEW_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/"$NEW_USER"
